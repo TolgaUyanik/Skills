@@ -1,6 +1,42 @@
-# Mode C run-folder templates
+# Auto-run folder templates (Modes B and C)
 
 Run folder: `docs/reviews/auto-YYYY-MM-DD-<runid>/`
+
+## 00-pregate.md (Mode B only, written before any item runs)
+
+```markdown
+# Pre-gate — <plan path>
+
+**Date:** <YYYY-MM-DD>
+**Outcome:** PROCEED | HALT | ESCALATE (zero LOAD-BEARING rows — extractor
+failure)
+
+## Ledger
+
+| id | assumption | tag | status | attack | evidence / check |
+|----|------------|-----|--------|--------|------------------|
+
+Joined by `id`: `assumption`/`tag` come from the extractor, `status`/`attack`/
+`evidence` from the attacker. Lists every extracted row, incidental rows
+included — a row never attacked carries an empty `status`.
+
+## Halting / escalation rows
+- **A1** (BROKEN) — <assumption>
+  - Attack: <scenario> · Evidence: <file:line>
+- **A3** (UNVERIFIED) — <assumption>
+  - Settling check: <the one check>
+- ESCALATE — zero LOAD-BEARING rows extracted; ledger above holds only
+  incidental rows, if any
+- (or: none — proceeded)
+
+## Rejected rows
+- <id> — <why invalid>
+- (or: none)
+```
+
+Mode B halts on any LOAD-BEARING row that is BROKEN **or** UNVERIFIED — stricter
+than a standalone `--refute`, which only REVISEs on BROKEN. The pre-gate never
+enters the 3-round REVISE loop.
 
 ## 00-manifest.md
 
