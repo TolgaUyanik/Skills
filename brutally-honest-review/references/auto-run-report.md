@@ -25,6 +25,7 @@ included — a row never attacked carries an empty `status`.
   - Attack: <scenario> · Evidence: <file:line>
 - **A3** (UNVERIFIED) — <assumption>
   - Settling check: <the one check>
+- **A5** (REJECTED or NOT RETURNED, counted UNVERIFIED) — <assumption> · Settling check: re-attack A5
 - ESCALATE — zero LOAD-BEARING rows extracted; ledger above holds only
   incidental rows, if any
 - (or: none — proceeded)
@@ -36,7 +37,7 @@ included — a row never attacked carries an empty `status`.
 
 Mode B halts on any LOAD-BEARING row that is BROKEN **or** UNVERIFIED — stricter
 than a standalone `--refute`, which only REVISEs on BROKEN. The pre-gate never
-enters the 3-round REVISE loop.
+enters the REVISE loop.
 
 ## 00-manifest.md
 
@@ -71,12 +72,16 @@ Task text (verbatim from source) + clarifications that apply.
 - ASSUMPTION: <any mid-run ambiguity + the conservative reading taken>
 
 ## Review round 1
-<full reviewer output, verbatim — VERDICT / FINDINGS / SUMMARY>
+<full reviewer output, verbatim — the whole SKILL.md contract>
+Open list after step 5: <location — round raised> | none
 
-### Fixes applied
-- <finding → what was changed>
+### Fix log
+- Applied: <finding → what was changed, all instances; or `already removed by <what removed it>, <file:line>`>
+- Adjusted: <finding → narrower change and why the cite did not hold, or a missed copy edited + the grep used>
+- Declined: <finding → why>
+- Deferred: <MINOR/NIT not applied in this round>
 
-## Review round 2 ... (up to 3)
+## Review round 2 ... (up to the round cap)
 
 ## Outcome
 PASS (round N) | ESCALATED (outstanding findings listed)

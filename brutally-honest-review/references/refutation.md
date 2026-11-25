@@ -16,6 +16,8 @@ Prompt contents:
   incidental (the target merely degrades or is inelegant if this is false).
   Do NOT attack them. Do NOT propose fixes. Extract only."
 
+Round N ≥ 2 (SKILL.md Mode D step 7): the extractor gets the diff since round N-1 and the existing ledger, extracts only assumptions the changed lines add, and numbers them from the next free id.
+
 Output shape:
 
 ```
@@ -26,9 +28,7 @@ ASSUMPTIONS:
     rests_on: <the section or line of the target that needs it>
 ```
 
-**Zero LOAD-BEARING rows is NOT a pass.** A target with no load-bearing
-assumptions does not exist, so zero means the extractor failed. ESCALATE to the
-user; do not proceed to Phase 2 and do not emit a verdict.
+**Zero LOAD-BEARING rows in round 1 is NOT a pass.** A target with no load-bearing assumptions does not exist, so zero in round 1 means the extractor failed. ESCALATE to the user; do not proceed to Phase 2 and do not emit a verdict. In round N ≥ 2 the extractor extracts only from the diff, so zero new rows is expected: proceed to Phase 2 with the rows SKILL.md Mode D step 7 re-attacks. A reply with no `ASSUMPTIONS:` block is not zero rows: re-dispatch once; if still missing, ESCALATE as in round 1.
 
 ## Phase 2 — attackers (parallel, LOAD-BEARING rows only)
 
@@ -41,6 +41,7 @@ Prompt contents (one prompt per attacker):
 - The target file paths, and the original user ask verbatim. An attacker is
   never told to work out its own target.
 - ONLY this attacker's assigned rows (id, tag, assumption, rests_on).
+- Round N ≥ 2: each row's previous `attack:` and `evidence:`/`check:`, and the diff since round N-1. The attack re-tests the previous scenario first.
 - The solidity bar and the evidence bound below.
 - The output shape below, and the instruction to return that and nothing else.
 
@@ -91,6 +92,8 @@ status:
 So a row arriving `BROKEN` with neither `evidence:` nor `check:` is downgraded,
 then rejected, and appears under "Rejected rows". It is never silently kept.
 
+An attacker that returns nothing, or skips a row it was handed, is re-dispatched once for those rows. A LOAD-BEARING row that is rejected here, or still not returned, counts as UNVERIFIED for the verdict, with the settling check 're-attack <id>'. It is still listed under Rejected rows. Round N ≥ 2: a row that was BROKEN in round N-1 and is rejected or still not returned stays BROKEN, with its previous `evidence:`.
+
 ## Persona guard
 
 Fletcher theatrics are ALWAYS ON in Mode D. They live in `attack:` prose and in
@@ -115,8 +118,8 @@ Mode B's pre-gate reads THIS LEDGER, not the verdict line.
 
 ## Report template
 
-Standalone report path: `docs/reviews/YYYY-MM-DD-<topic>-refutation.md`. The
-suffix differs from `-review.md` because the artifact is a ledger, not a
+Standalone report path: `docs/reviews/YYYY-MM-DD-<topic>-refutation-r<N>.md` (N = round, 1 on a single run). The
+suffix differs from Mode A's `-review-r<N>.md` because the artifact is a ledger, not a
 findings list.
 
 ```markdown
